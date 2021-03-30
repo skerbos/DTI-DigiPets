@@ -424,7 +424,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 0854f466a8fd05242ae0d9344545bfff, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -551,8 +551,9 @@ GameObject:
   - component: {fileID: 116401031}
   - component: {fileID: 116401029}
   - component: {fileID: 116401028}
-  - component: {fileID: 116401027}
   - component: {fileID: 116401032}
+  - component: {fileID: 116401030}
+  - component: {fileID: 116401027}
   m_Layer: 0
   m_Name: Other Player
   m_TagString: Player
@@ -560,30 +561,57 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &116401027
-MonoBehaviour:
+--- !u!212 &116401027
+SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 116401026}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90d118394c6f6c4691b59b99a7f1618, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveForce: 100
-  maxSpeed: 5
-  playerInteractText: {fileID: 1046814325}
-  defaultSprite: {fileID: 21300000, guid: dee4adaed6641464fbe000b71dfc90ac, type: 3}
-  feedSprite: {fileID: 21300000, guid: ada8781cd3ef31447a136868ee1ca893, type: 3}
-  playSprite: {fileID: 21300000, guid: 1d68634b17b14f848bc795023e573010, type: 3}
-  interactSprite: {fileID: 21300000, guid: 66bdf50d95cdb044dacd6ee414b4a81c, type: 3}
-  up: 119
-  down: 115
-  left: 97
-  right: 100
-  interact: 99
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 74150005
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.120671, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!61 &116401028
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -601,8 +629,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.2375, y: 6.45}
-    newSize: {x: 6.23, y: 6.44}
+    oldSize: {x: 5.120671, y: 5.12}
+    newSize: {x: 5.120671, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -631,6 +659,25 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &116401030
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116401026}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 30baba483b4abfb48858660cb827164e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!4 &116401031
 Transform:
   m_ObjectHideFlags: 0
@@ -638,14 +685,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 116401026}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -4.99, y: 2.35, z: -1.7269325}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 504822441}
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &116401032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -660,6 +707,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   petID: 2
   petCursor: {fileID: 2072633029}
+  animator: {fileID: 116401030}
+  playerInteractText: {fileID: 1046814325}
 --- !u!1 &189313565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1533,7 +1582,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 504822440}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2824,7 +2873,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0f564ab2321b848898c98630a22436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickKey: 112
+  up: 273
+  down: 274
+  left: 276
+  right: 275
+  clickKey: 109
   cursorID: 1
 --- !u!61 &1040153999
 BoxCollider2D:
@@ -2960,7 +3013,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 0854f466a8fd05242ae0d9344545bfff, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -4133,7 +4186,6 @@ GameObject:
   - component: {fileID: 1433845779}
   - component: {fileID: 1433845782}
   - component: {fileID: 1433845781}
-  - component: {fileID: 1433845780}
   - component: {fileID: 1433845783}
   m_Layer: 0
   m_Name: Player
@@ -4157,30 +4209,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1433845780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1433845777}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90d118394c6f6c4691b59b99a7f1618, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveForce: 100
-  maxSpeed: 5
-  playerInteractText: {fileID: 73452372}
-  defaultSprite: {fileID: 21300000, guid: 0890e10cd9df4a247b0f448f29fadae0, type: 3}
-  feedSprite: {fileID: 21300000, guid: d69db30f44fad1d4a8c770008d5660e6, type: 3}
-  playSprite: {fileID: 21300000, guid: 1c2f8d38dbd54264a8de5f2e0913c7a7, type: 3}
-  interactSprite: {fileID: 21300000, guid: 5dc42dd70cb6fc74787455af8e513c1e, type: 3}
-  up: 273
-  down: 274
-  left: 276
-  right: 275
-  interact: 109
 --- !u!61 &1433845781
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4242,6 +4270,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   petID: 1
   petCursor: {fileID: 1040153997}
+  animator: {fileID: 0}
+  playerInteractText: {fileID: 73452372}
 --- !u!1 &1481114190
 GameObject:
   m_ObjectHideFlags: 0
@@ -5488,7 +5518,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0f564ab2321b848898c98630a22436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickKey: 112
+  up: 119
+  down: 115
+  left: 97
+  right: 100
+  clickKey: 118
   cursorID: 2
 --- !u!61 &2072633031
 BoxCollider2D:
