@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Play
   - Feed
+  - PlayerCursor
   layers:
   - Default
   - TransparentFX

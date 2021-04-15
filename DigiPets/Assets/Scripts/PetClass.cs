@@ -78,15 +78,15 @@ public class PetClass : MonoBehaviour
             if (Time.time > endRoamTime + roamTime && isMoving == false && isRoaming == false && isInteracting == false)
             {
                 isRoaming = true;
-                randomPos = new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
+                randomPos = new Vector2(Random.Range(-15f, 15f), Random.Range(-15f, 15f));
                 endRoamTime = Time.time;
-                roamTime = Random.Range(10f, 15f);
+                roamTime = Random.Range(7f, 10f);
                 Debug.Log(randomPos);
             }
             else if (isMoving == true || isInteracting == true)
             {
                 endRoamTime = Time.time;
-                roamTime = Random.Range(10f, 15f);
+                roamTime = Random.Range(7f, 10f);
             }
             return randomPos;
         }
@@ -155,7 +155,33 @@ public class PetClass : MonoBehaviour
                     isInteracting = true;
                     animator.SetBool("isFeeding", true);
                 }
-                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == true)
+                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == true || isMoving == true)
+                {
+                    isInteracting = false;
+                    animator.SetBool("isFeeding", false);
+                }
+            }
+            else if (interactable.CompareTag("Play"))
+            {
+                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == false)
+                {
+                    isInteracting = true;
+                    animator.SetBool("isFeeding", true);
+                }
+                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == true || isMoving == true)
+                {
+                    isInteracting = false;
+                    animator.SetBool("isFeeding", false);
+                }
+            }
+            else if (interactable.CompareTag("Player"))
+            {
+                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == false)
+                {
+                    isInteracting = true;
+                    animator.SetBool("isFeeding", true);
+                }
+                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == true || isMoving == true)
                 {
                     isInteracting = false;
                     animator.SetBool("isFeeding", false);
