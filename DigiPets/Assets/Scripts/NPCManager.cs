@@ -17,7 +17,7 @@ public class NPCManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        SpawnControl();
     }
 
     void Spawn()
@@ -28,6 +28,37 @@ public class NPCManager : MonoBehaviour
             npcClone.transform.position = new Vector2(Random.Range(-13f, 13f), Random.Range(-13f, 13f));
             AssignState(npcClone);
         }
+    }
+
+    void SpawnControl()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            GameObject npcClone = Instantiate(npc);
+            npcClone.transform.position = new Vector2(Random.Range(-13f, 13f), Random.Range(-13f, 13f));
+            AssignState(npcClone);
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject npcClone = Instantiate(npc);
+                npcClone.transform.position = new Vector2(Random.Range(-13f, 13f), Random.Range(-13f, 13f));
+                AssignState(npcClone);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.J))
+        {
+            Destroy(GameObject.FindGameObjectWithTag("NPC"));
+        }
+        else if (Input.GetKeyDown(KeyCode.H))
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Destroy(GameObject.FindGameObjectWithTag("NPC"));
+            }
+        }
+
     }
 
     void AssignState(GameObject npc)
