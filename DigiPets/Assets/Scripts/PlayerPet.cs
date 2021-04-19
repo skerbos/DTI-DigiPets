@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class PlayerPet : MonoBehaviour
 {
-    public PetClass.Pet pet = new PetClass.Pet(7f, 5f, false, false, false);
+    public PetClass.Pet pet = new PetClass.Pet(7f, 5f, false, false, false, "");
     public int petID = 1;
     public GameObject petCursor;
+    public GameObject stateIcon;
     public Animator animator;
     public Text playerInteractText;
     private Rigidbody2D rb;
@@ -17,6 +18,7 @@ public class PlayerPet : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        pet.currentState = "neutral";
     }
 
     // Update is called once per frame
@@ -28,6 +30,15 @@ public class PlayerPet : MonoBehaviour
             pet.Roam(gameObject, rb, pet.PickRandomRoamPoint(), animator);
         }
         pet.Interact(gameObject, petCursor, currentInteractable, animator);
+        pet.ShowCurrentState(gameObject, stateIcon);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("NPC"))
+        {
+            pet.EndemicBehavior(gameObject, collision.gameObject);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collider)

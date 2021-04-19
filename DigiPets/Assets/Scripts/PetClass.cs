@@ -15,6 +15,8 @@ public class PetClass : MonoBehaviour
         public abstract void Move(GameObject self, Rigidbody2D rb, Vector2 cursorPos, Animator animator);
         public abstract void Interact(GameObject self, GameObject cursor, GameObject interactable, Animator animator);
         public abstract void InteractWithOtherPet(GameObject self, GameObject other, Rigidbody2D rbself, Rigidbody2D rbother);
+        public abstract void EndemicBehavior(GameObject self, GameObject other);
+        public abstract void ShowCurrentState(GameObject self, GameObject stateIcon);
     }
 
     public class Pet : PetBehavior
@@ -25,22 +27,24 @@ public class PetClass : MonoBehaviour
         public bool isMoving;
         public bool isRoaming;
         public bool isInteracting;
+        public string currentState;
         private float endRoamTime;
         private Vector2 randomPos;
         private Vector2 travelPos;
 
-        public Pet(float moveSpeed, float roamTime, bool isMoving, bool isRoaming, bool isInteracting)
+        public Pet(float moveSpeed, float roamTime, bool isMoving, bool isRoaming, bool isInteracting, string currentState)
         {
             this.moveSpeed = moveSpeed;
             this.roamTime = roamTime;
             this.isMoving = isMoving;
             this.isRoaming = isRoaming;
             this.isInteracting = isInteracting;
+            this.currentState = currentState;
         }
 
         public override Vector2 SetTravelPosition(GameObject self, GameObject cursor)
         {
-            if (cursor.GetComponent<PlayerCursor>().cursorID == self.GetComponent<PlayerPet>().petID && cursor.GetComponent<PlayerCursor>().cursor.isOnPet == false && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click))
+            if (cursor.GetComponent<PlayerCursor>().cursorID == self.GetComponent<PlayerPet>().petID && cursor.GetComponent<PlayerCursor>().cursor.isOnPet == false && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID))
             {
                 travelPos = (Vector2)cursor.transform.position;
                 isMoving = true;
@@ -78,10 +82,9 @@ public class PetClass : MonoBehaviour
             if (Time.time > endRoamTime + roamTime && isMoving == false && isRoaming == false && isInteracting == false)
             {
                 isRoaming = true;
-                randomPos = new Vector2(Random.Range(-15f, 15f), Random.Range(-15f, 15f));
+                randomPos = new Vector2(Random.Range(-13f, 13f), Random.Range(-13f, 13f));
                 endRoamTime = Time.time;
                 roamTime = Random.Range(7f, 10f);
-                Debug.Log(randomPos);
             }
             else if (isMoving == true || isInteracting == true)
             {
@@ -150,12 +153,13 @@ public class PetClass : MonoBehaviour
         {
             if (interactable.CompareTag("Feed"))
             {
-                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == false)
+                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == false)
                 {
+                    currentState = "happy";
                     isInteracting = true;
                     animator.SetBool("isFeeding", true);
                 }
-                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == true || isMoving == true)
+                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == true || isMoving == true)
                 {
                     isInteracting = false;
                     animator.SetBool("isFeeding", false);
@@ -163,12 +167,12 @@ public class PetClass : MonoBehaviour
             }
             else if (interactable.CompareTag("Play"))
             {
-                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == false)
+                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == false)
                 {
                     isInteracting = true;
                     animator.SetBool("isFeeding", true);
                 }
-                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == true || isMoving == true)
+                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == true || isMoving == true)
                 {
                     isInteracting = false;
                     animator.SetBool("isFeeding", false);
@@ -176,17 +180,51 @@ public class PetClass : MonoBehaviour
             }
             else if (interactable.CompareTag("Player"))
             {
-                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == false)
+                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == false)
                 {
                     isInteracting = true;
                     animator.SetBool("isFeeding", true);
                 }
-                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetKeyDown(cursor.GetComponent<PlayerCursor>().cursor.click) && isInteracting == true || isMoving == true)
+                else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == true || isMoving == true)
                 {
                     isInteracting = false;
                     animator.SetBool("isFeeding", false);
                 }
             }
+        }
+
+        public override void EndemicBehavior(GameObject self, GameObject other)
+        {
+            if ((currentState == "happy" || currentState == "sad") && other.GetComponent<NPCPet>().npc.currentState == "neutral")
+            {
+                if (Random.Range(0, 5) == 1)
+                {
+                    other.GetComponent<NPCPet>().npc.currentState = currentState;
+                }
+            }
+            else if (currentState == "happy" && other.GetComponent<NPCPet>().npc.currentState == "sad")
+            {
+                currentState = "neutral";
+                other.GetComponent<NPCPet>().npc.currentState = "neutral";
+            }
+
+        }
+
+        public override void ShowCurrentState(GameObject self, GameObject stateIcon)
+        {
+            if (currentState == "happy")
+            {
+                stateIcon.GetComponent<SpriteRenderer>().color = Color.green;
+            }
+            else if (currentState == "sad")
+            {
+                stateIcon.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+            else if (currentState == "neutral")
+            {
+                stateIcon.GetComponent<SpriteRenderer>().color = Color.blue;
+            }
+            //stateIcon.transform.position = new Vector2(self.transform.position.x, self.transform.position.y + 50);
         }
 
         public override void InteractWithOtherPet(GameObject self, GameObject other, Rigidbody2D rbself, Rigidbody2D rbother)
