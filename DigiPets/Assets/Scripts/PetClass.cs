@@ -274,7 +274,7 @@ public class PetClass : MonoBehaviour
                     other.GetComponent<NPCPet>().npc.currentState = currentState;
                 }
             }
-            else if ((currentState == "happy" && other.GetComponent<NPCPet>().npc.currentState == "sad") || (currentState == "sad" && other.GetComponent<NPCPet>().npc.currentState == "happy"))
+            else if ((currentState != "neutral" && other.GetComponent<NPCPet>().npc.currentState != "neutral") && currentState != other.GetComponent<NPCPet>().npc.currentState)
             {
                 if (Random.Range(0, 50) == 1)
                 {
