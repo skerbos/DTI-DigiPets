@@ -32,11 +32,13 @@ public class NPCManager : MonoBehaviour
 
     void AssignState(GameObject npc)
     {
-        if (Random.Range(0, 10) == 0)
+        int randomState = Random.Range(0, 10);
+
+        if (randomState == 0)
         {
             npc.GetComponent<NPCPet>().npc.currentState = "happy";
         }
-        else if (Random.Range(0, 10) == 1)
+        else if (randomState == 1)
         {
             npc.GetComponent<NPCPet>().npc.currentState = "sad";
         }

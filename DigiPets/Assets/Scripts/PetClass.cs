@@ -195,17 +195,20 @@ public class PetClass : MonoBehaviour
 
         public override void EndemicBehavior(GameObject self, GameObject other)
         {
-            if ((currentState == "happy" || currentState == "sad") && other.GetComponent<NPCPet>().npc.currentState == "neutral")
+            if (currentState != "neutral" && other.GetComponent<NPCPet>().npc.currentState == "neutral")
             {
-                if (Random.Range(0, 5) == 1)
+                if (Random.Range(0, 50) == 1)
                 {
                     other.GetComponent<NPCPet>().npc.currentState = currentState;
                 }
             }
             else if (currentState == "happy" && other.GetComponent<NPCPet>().npc.currentState == "sad")
             {
-                currentState = "neutral";
-                other.GetComponent<NPCPet>().npc.currentState = "neutral";
+                if (Random.Range(0, 50) == 1)
+                {
+                    currentState = "neutral";
+                    other.GetComponent<NPCPet>().npc.currentState = "neutral";
+                }
             }
 
         }
