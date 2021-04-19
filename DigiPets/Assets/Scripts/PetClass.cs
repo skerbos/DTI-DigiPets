@@ -14,6 +14,7 @@ public class PetClass : MonoBehaviour
         public abstract void Roam(GameObject self, Rigidbody2D rb, Vector2 randomPos, Animator animator);
         public abstract void Move(GameObject self, Rigidbody2D rb, Vector2 cursorPos, Animator animator);
         public abstract void Interact(GameObject self, GameObject cursor, GameObject interactable, Animator animator);
+        public abstract void InteractTOW(GameObject self, GameObject cursor, GameObject interactable, Animator animator);
         public abstract void InteractWithOtherPet(GameObject self, GameObject other, Rigidbody2D rbself, Rigidbody2D rbother);
         public abstract void EndemicBehavior(GameObject self, GameObject other);
         public abstract void ShowCurrentState(GameObject self, GameObject stateIcon);
@@ -22,24 +23,33 @@ public class PetClass : MonoBehaviour
     public class Pet : PetBehavior
     {
 
+        public int petId;
+        public GameObject currentInteractableObject = null;
         public float moveSpeed;
         public float roamTime;
         public bool isMoving;
+        public bool isStopMovement;
+        public bool isPlayingTOW;
         public bool isRoaming;
         public bool isInteracting;
         public string currentState;
         private float endRoamTime;
         private Vector2 randomPos;
         private Vector2 travelPos;
+        TOWGame TOW;
+        GameObject TOWBar;
 
-        public Pet(float moveSpeed, float roamTime, bool isMoving, bool isRoaming, bool isInteracting, string currentState)
+
+		public Pet(float moveSpeed, float roamTime, bool isMoving, bool isRoaming, bool isInteracting, string currentState, bool isStopMovement = false, int petId = 0)
         {
+            this.petId = petId;
             this.moveSpeed = moveSpeed;
             this.roamTime = roamTime;
             this.isMoving = isMoving;
             this.isRoaming = isRoaming;
             this.isInteracting = isInteracting;
-            this.currentState = currentState;
+			this.isStopMovement = isStopMovement;
+			this.currentState = currentState;
         }
 
         public override Vector2 SetTravelPosition(GameObject self, GameObject cursor)
@@ -68,8 +78,13 @@ public class PetClass : MonoBehaviour
             else if (interactable.CompareTag("Player"))
             {
                 text.gameObject.SetActive(true);
-                text.text = "Interact!";
+                text.text = "Play Tug-Of-War!";
             }
+            //else if (interactable.CompareTag("NPC"))
+            //{
+            //    text.gameObject.SetActive(true);
+            //    text.text = "Interact!";
+            //}
         }
 
         public override void Idle()
@@ -123,8 +138,11 @@ public class PetClass : MonoBehaviour
 
         public override void Move(GameObject self, Rigidbody2D rb, Vector2 cursorPos, Animator animator)
         {
+
             if (isMoving == true)
             {
+                isInteracting = false;
+                animator.SetBool("isFeeding", false);
                 Vector2 moveDir = (cursorPos - (Vector2)self.transform.position);
                 if (moveDir.magnitude > 1f)
                 {
@@ -149,12 +167,20 @@ public class PetClass : MonoBehaviour
             }
         }
 
+        public override void InteractTOW(GameObject self, GameObject cursor, GameObject interactable, Animator animator)
+        {
+            TOW.UpdateBar(self, cursor, interactable, animator);
+        }
+
         public override void Interact(GameObject self, GameObject cursor, GameObject interactable, Animator animator)
         {
-            if (interactable.CompareTag("Feed"))
+            if (interactable == null)
             {
-                if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == false)
-                {
+
+            }
+            else if (interactable.CompareTag("Feed"))
+            {
+				if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == false)                {
                     currentState = "happy";
                     isInteracting = true;
                     animator.SetBool("isFeeding", true);
@@ -182,13 +208,59 @@ public class PetClass : MonoBehaviour
             {
                 if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == false)
                 {
-                    isInteracting = true;
-                    animator.SetBool("isFeeding", true);
+                    //Start Game
+                    PlayerPet HostPlayer = self.GetComponent<PlayerPet>();
+                    PlayerPet OpponentPlayer = interactable.GetComponent<PlayerPet>();
+
+                    //Stop movement for pets
+                    HostPlayer.pet.isPlayingTOW = true;
+                    HostPlayer.pet.isInteracting = true;
+                    HostPlayer.pet.isStopMovement = true;
+                    HostPlayer.pet.isMoving = false;
+                    HostPlayer.pet.isRoaming = false;
+                    OpponentPlayer.pet.isPlayingTOW = true;
+                    OpponentPlayer.pet.isInteracting = true;
+                    OpponentPlayer.pet.isStopMovement = true;
+                    OpponentPlayer.pet.isMoving = false;
+                    OpponentPlayer.pet.isRoaming = false;
+
+                    // Get Position each Player
+                    var HostPosition = self.transform.position;
+                    var OpponentPosition = interactable.transform.position;
+
+                    // Find Mid X Distance between Player to setup bar position
+                    float xDist = HostPosition.x - ((HostPosition.x - OpponentPosition.x) / 2);
+
+                    // Find Bigger Y distance between player to setup bar position
+                    // todo: Add check if out of bounds. If -5 is out of bounds, put +5 units above biggest Y between players
+                    float yDist = HostPosition.y <= OpponentPosition.y ? HostPosition.y : OpponentPosition.y;
+                    yDist = yDist - 5;
+
+                    // Decide Who is Left & Right Player
+                    PlayerPet LeftPlayer = (HostPosition.x <= OpponentPosition.x) ? HostPlayer : OpponentPlayer;
+                    PlayerPet RightPlayer = (LeftPlayer == OpponentPlayer) ? HostPlayer : OpponentPlayer;
+
+
+                    //self.GetComponent<PlayerPet>();
+                    //interactable.AddComponent<TOWGame> ();
+
+                    // Instantiate Game between both players
+                    //tow = new TOWGame(LeftPlayer, RightPlayer, xDist, yDist);
+                    TOWBar = GameObject.Find("TOWCanvas/TOWBar");
+                    TOW = TOWBar.GetComponent<TOWGame>();
+                    TOW.StartNewGame(LeftPlayer, RightPlayer, xDist, yDist);
+                    OpponentPlayer.pet.TOW = TOW;
+
+
+                    //animator.SetBool("isFeeding", true);
                 }
                 else if (cursor.GetComponent<PlayerCursor>().cursor.isOnPet == true && Input.GetButtonDown("JFire1" + cursor.GetComponent<PlayerCursor>().cursorID) && isInteracting == true || isMoving == true)
                 {
                     isInteracting = false;
-                    animator.SetBool("isFeeding", false);
+                    isStopMovement = false;
+                    //animator.SetBool("isPlayingTugOfWar", false);
+                    //animator.SetBool("isFeeding", false);
+
                 }
             }
         }
