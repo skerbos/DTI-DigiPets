@@ -35,6 +35,7 @@ public class NPCManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             GameObject npcClone = Instantiate(npc);
+            //AssignSprite(npcClone);
             npcClone.transform.position = new Vector2(Random.Range(-13f, 13f), Random.Range(-13f, 13f));
             AssignState(npcClone);
         }
@@ -44,19 +45,13 @@ public class NPCManager : MonoBehaviour
             {
                 GameObject npcClone = Instantiate(npc);
                 npcClone.transform.position = new Vector2(Random.Range(-13f, 13f), Random.Range(-13f, 13f));
+                //AssignSprite(npcClone);
                 AssignState(npcClone);
             }
         }
         else if (Input.GetKeyDown(KeyCode.J))
         {
             Destroy(GameObject.FindGameObjectWithTag("NPC"));
-        }
-        else if (Input.GetKeyDown(KeyCode.H))
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                Destroy(GameObject.FindGameObjectWithTag("NPC"));
-            }
         }
 
     }
@@ -77,5 +72,19 @@ public class NPCManager : MonoBehaviour
         {
             npc.GetComponent<NPCPet>().npc.currentState = "neutral";
         }
+    }
+
+    void AssignSprite(GameObject npc)
+    {
+        //int randomSprite = Random.Range(0, 2);
+
+        //if (randomSprite == 0)
+        //{
+        npc.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Assets/Animations/Player.controller");
+        //}
+        //else 
+        //{
+        //    npc.GetComponent<Animator>().runtimeAnimatorController = Resources.Load("Assets/Animations/Other Player") as RuntimeAnimatorController;
+        //}
     }
 }
